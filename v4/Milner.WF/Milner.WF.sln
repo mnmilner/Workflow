@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milner.WFActivities", "Milner.WFActivities\Milner.WFActivities.csproj", "{C5D8FE70-08E9-4B59-86F1-F95C4CB6EE75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milner.WFActivities.Tests", "Milner.WFActivities.Tests\Milner.WFActivities.Tests.csproj", "{47589B79-CEF5-42DA-AFEA-FB60173AC378}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5D8FE70-08E9-4B59-86F1-F95C4CB6EE75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5D8FE70-08E9-4B59-86F1-F95C4CB6EE75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5D8FE70-08E9-4B59-86F1-F95C4CB6EE75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5D8FE70-08E9-4B59-86F1-F95C4CB6EE75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47589B79-CEF5-42DA-AFEA-FB60173AC378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47589B79-CEF5-42DA-AFEA-FB60173AC378}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47589B79-CEF5-42DA-AFEA-FB60173AC378}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47589B79-CEF5-42DA-AFEA-FB60173AC378}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

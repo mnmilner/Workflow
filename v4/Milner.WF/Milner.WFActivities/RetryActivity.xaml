@@ -1,0 +1,197 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Milner.WFActivities.RetryActivity"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="retryCount" Type="InArgument(x:Int32)" />
+    <x:Property Name="retryInterval" Type="InArgument(x:TimeSpan)" />
+    <x:Property Name="CurrentExceptionHandler" Type="ActivityAction(s:Exception, x:Int32)" />
+    <x:Property Name="FinalExceptionHandler" Type="ActivityAction(s:Exception)" />
+    <x:Property Name="ActivityToRetry" Type="ActivityAction" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Milner.WFActivities.Activity1_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>System.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Milner.WFActivities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="s:Exception" Name="currentException">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:Exception">null</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <DoWhile DisplayName="RetryWhileExceptionAndNotOverLimit" sap2010:WorkflowViewState.IdRef="DoWhile_1">
+      <DoWhile.Variables>
+        <Variable x:TypeArguments="x:Int32" Default="0" Name="currentIteration" />
+      </DoWhile.Variables>
+      <DoWhile.Condition>
+        <mca:CSharpValue x:TypeArguments="x:Boolean">currentIteration &lt;= retryCount &amp;&amp; currentException != null</mca:CSharpValue>
+      </DoWhile.Condition>
+      <TryCatch DisplayName="TrySpecifiedActivity" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+        <TryCatch.Try>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+            <Assign DisplayName="ClearCurrentException" sap2010:WorkflowViewState.IdRef="Assign_1">
+              <Assign.To>
+                <OutArgument x:TypeArguments="s:Exception">
+                  <mca:CSharpReference x:TypeArguments="s:Exception">currentException</mca:CSharpReference>
+                </OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="s:Exception">
+                  <mca:CSharpValue x:TypeArguments="s:Exception">null</mca:CSharpValue>
+                </InArgument>
+              </Assign.Value>
+            </Assign>
+            <InvokeDelegate DisplayName="InvokeRetryableActivity" sap2010:WorkflowViewState.IdRef="InvokeDelegate_1">
+              <PropertyReference x:TypeArguments="ActivityDelegate" PropertyName="ActivityToRetry" />
+            </InvokeDelegate>
+          </Sequence>
+        </TryCatch.Try>
+        <TryCatch.Catches>
+          <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+            <ActivityAction x:TypeArguments="s:Exception">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+              </ActivityAction.Argument>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+                <InvokeDelegate DisplayName="InvokeHandlerForCurrentException" sap2010:WorkflowViewState.IdRef="InvokeDelegate_2">
+                  <InvokeDelegate.DelegateArguments>
+                    <InArgument x:TypeArguments="s:Exception" x:Key="Argument1">
+                      <mca:CSharpValue x:TypeArguments="s:Exception">exception</mca:CSharpValue>
+                    </InArgument>
+                    <InArgument x:TypeArguments="x:Int32" x:Key="Argument2">
+                      <mca:CSharpValue x:TypeArguments="x:Int32">currentIteration</mca:CSharpValue>
+                    </InArgument>
+                  </InvokeDelegate.DelegateArguments>
+                  <PropertyReference x:TypeArguments="ActivityDelegate" PropertyName="CurrentExceptionHandler" />
+                </InvokeDelegate>
+                <Assign DisplayName="CaptureCurrentException" sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="s:Exception">
+                      <mca:CSharpReference x:TypeArguments="s:Exception">currentException</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="s:Exception">
+                      <mca:CSharpValue x:TypeArguments="s:Exception">exception</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign DisplayName="IncrementCounter" sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">
+                      <mca:CSharpReference x:TypeArguments="x:Int32">currentIteration</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">
+                      <mca:CSharpValue x:TypeArguments="x:Int32">currentIteration + 1</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Delay DisplayName="WaitForRetryInterval" sap2010:WorkflowViewState.IdRef="Delay_1">
+                  <InArgument x:TypeArguments="x:TimeSpan">
+                    <mca:CSharpValue x:TypeArguments="x:TimeSpan">retryInterval</mca:CSharpValue>
+                  </InArgument>
+                </Delay>
+              </Sequence>
+            </ActivityAction>
+          </Catch>
+        </TryCatch.Catches>
+      </TryCatch>
+    </DoWhile>
+    <InvokeDelegate DisplayName="InvokeFinalExceptionHandler" sap2010:WorkflowViewState.IdRef="InvokeDelegate_3">
+      <InvokeDelegate.DelegateArguments>
+        <InArgument x:TypeArguments="s:Exception" x:Key="Argument">
+          <mca:CSharpValue x:TypeArguments="s:Exception">currentException</mca:CSharpValue>
+        </InArgument>
+      </InvokeDelegate.DelegateArguments>
+      <PropertyReference x:TypeArguments="ActivityDelegate" PropertyName="FinalExceptionHandler" />
+    </InvokeDelegate>
+    <sads:DebugSymbol.Symbol>d1FjOlx3b3JrXG1pbG5lcnB1YmxpY1x3b3JrZmxvd1x2NFxNaWxuZXIuV0ZcTWlsbmVyLldGQWN0aXZpdGllc1xSZXRyeUFjdGl2aXR5LnhhbWwZMAORAQ4CAQE0CzRQAgECOAWHAQ8CAQuIAQWPARYCAQY6NTo4AgEMPQk9jQECAUo/B4YBEgIBDYsBC4sBXAIBB0ELURYCAT1ZD4IBGgIBDkINTRYCAT9ODVAeAgE+WhFkIgIBMGURcBoCASNxEXwaAgEWfRGBARkCAQ9KE0pYAgFFRRNFbAIBQGAXYGQCATddF11hAgExbRdtYQIBKmgXaHACASR5F3loAgEddBd0bAIBF38Vf2ICARA=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="InvokeDelegate_1" sap:VirtualizedContainerService.HintSize="242,67" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,52">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeDelegate_2" sap:VirtualizedContainerService.HintSize="242,67" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Delay_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,457">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="404,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="200,52">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="DoWhile_1" sap:VirtualizedContainerService.HintSize="464,226" />
+      <sap2010:ViewStateData Id="InvokeDelegate_3" sap:VirtualizedContainerService.HintSize="464,67" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="486,457">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Milner.WFActivities.Activity1_1" sap:VirtualizedContainerService.HintSize="526,537" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
